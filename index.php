@@ -16,6 +16,17 @@ $task_6 = ['task' => 'Заказать пиццу', 'end_date' => 'Нет', 'cat
 // двумерный массив из всех задач
 $tasks = array($task_1, $task_2, $task_3, $task_4, $task_5, $task_6);
 
+function calculate_project ($z, $p){
+	$sum = 0;
+	foreach ($z as $key => $val) {			
+		if ($val['category'] == $p){			
+			$sum = $sum + 1;
+		} elseif ($p == 'Все') {
+			$sum = count($z);
+		}
+	}
+	return $sum;
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -65,7 +76,7 @@ $tasks = array($task_1, $task_2, $task_3, $task_4, $task_5, $task_6);
 					<?php foreach ($project as $i => $project): ?>
                         <li class="main-navigation__list-item <?php if ($i == 0): ?>main-navigation__list-item--active<?php endif ?>">
                             <a class="main-navigation__list-item-link" href="#"><?=$project?></a>
-                            <span class="main-navigation__list-item-count">0</span>
+                            <span class="main-navigation__list-item-count"><?php print(calculate_project($tasks, $project))?></span>
                         </li>
 					<?php endforeach ?>
                     </ul>
