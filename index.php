@@ -17,13 +17,14 @@ $task_6 = ['task' => 'Заказать пиццу', 'end_date' => 'Нет', 'cat
 $tasks = array($task_1, $task_2, $task_3, $task_4, $task_5, $task_6);
 
 function calculate_project ($z, $p){
+	if ($p == 'Все'){
+			return count($z);
+		}
 	$sum = 0;
 	foreach ($z as $key => $val) {			
 		if ($val['category'] == $p){			
 			$sum = $sum + 1;
-		} elseif ($p == 'Все') {
-			$sum = count($z);
-		}
+		} 
 	}
 	return $sum;
 }
