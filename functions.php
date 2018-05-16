@@ -31,8 +31,8 @@ function deadline ($data){
 	if ($end_date == "") {
 		return "";
 	}
-	$curdate = strtotime(date('d.m.Y H:i'));
-	$deadline = floor(($end_date - $curdate)/3600);
+	$curdate = time();
+	$deadline = floor(($end_date - $curdate)/60/60);
 	
 	return $deadline;
 }
