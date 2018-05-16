@@ -28,7 +28,7 @@
 
                 <table class="tasks">
 					<?php foreach ($tasks as $key => $val): ?>
-							<tr <?php if ($val['complete'] == false): ?> class="tasks__item task" <?php else : ?> class="tasks__item task task--completed" <?php endif ?>>
+							<tr class="tasks__item task <?php if ($val['complete'] == true): ?>task--completed <?php elseif (deadline($val['end_date']) <= 24 and deadline($val['end_date']) != ""): ?>task--important<?php endif ?>">
 								<td class="task__select">
 									<label class="checkbox task__checkbox">
 										<input class="checkbox__input visually-hidden task__checkbox" type="checkbox" <?php if ($val['complete'] == true):?> checked <?php endif ?>>
