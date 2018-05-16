@@ -26,4 +26,15 @@ function include_template($file, $data){
 	return $contents;
 }
 
+function deadline ($data){
+	$end_date = strtotime($data);
+	if ($end_date == "") {
+		return "";
+	}
+	$curdate = time();
+	$deadline = floor(($end_date - $curdate)/60/60);
+	
+	return $deadline;
+}
+
 ?>
