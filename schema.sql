@@ -8,7 +8,7 @@ create table users (
  id int auto_increment primary key,
  name char(128) NOT NULL,
  email char(128) NOT NULL,
- reg_data datetime,
+ reg_date datetime DEFAULT CURRENT_TIMESTAMP,
  contacts char(128),
  pw char(64) NOT NULL
   );
@@ -23,8 +23,8 @@ create table projects (
 create table tasks (
  id int auto_increment primary key,
  task char(128) NOT NULL,
- create_data datetime,
- end_data datetime,
+ create_date datetime  DEFAULT CURRENT_TIMESTAMP,
+ end_date datetime,
  t_file blob,
  deadline datetime,
  u_id int(10),
