@@ -6,26 +6,27 @@ use doingsdone;
 
 create table users (
  id int auto_increment primary key,
- name char(128) NOT NULL,
- email char(128) NOT NULL,
+ name varchar(128) NOT NULL,
+ email varchar(128) NOT NULL,
  reg_date datetime DEFAULT CURRENT_TIMESTAMP,
- contacts char(128),
- pw char(64) NOT NULL
+ contacts varchar(128),
+ pw varchar(64) NOT NULL
   );
 
 create table projects (
  id int auto_increment primary key,
- project char(128) NOT NULL,
+ project varchar(128) NOT NULL,
  u_id int(10),
  FOREIGN KEY (u_id) REFERENCES users(id)
   );  
 
 create table tasks (
  id int auto_increment primary key,
- task char(128) NOT NULL,
+ task varchar(128) NOT NULL,
  create_date datetime  DEFAULT CURRENT_TIMESTAMP,
  end_date datetime,
- t_file blob,
+ file_name varchar (128),
+ file_path varchar (128),
  deadline datetime,
  u_id int(10),
  p_id int(10),
