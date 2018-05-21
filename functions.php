@@ -6,7 +6,7 @@ function calculate_project ($z, $p){
 		}
 	$sum = 0;
 	foreach ($z as $key => $val) {			
-		if ($val['category'] == $p){			
+		if ($val['project'] == $p){			
 			$sum = $sum + 1;
 		} 
 	}
