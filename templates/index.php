@@ -28,18 +28,21 @@
 
                 <table class="tasks">
 					<?php foreach ($tasks as $key => $val): ?>
-							<tr class="tasks__item task <?php if ($val['complete'] == true): ?>task--completed <?php elseif (deadline($val['end_date']) <= 24 and deadline($val['end_date']) != ""): ?>task--important<?php endif ?>">
+							<tr class="tasks__item task <?php if ($val['end_date'] !== NULL): ?>task--completed <?php elseif (deadline($val['deadline']) <= 24 and deadline($val['deadline']) != ""): ?>task--important<?php endif ?>">
 								<td class="task__select">
 									<label class="checkbox task__checkbox">
-										<input class="checkbox__input visually-hidden task__checkbox" type="checkbox" <?php if ($val['complete'] == true):?> checked <?php endif ?>>
+										<input class="checkbox__input visually-hidden task__checkbox" type="checkbox" <?php if ($val['end_date'] !== NULL):?> checked <?php endif ?>>
 										<span class="checkbox__text"><?=htmlspecialchars($val['task']);?></span>
 									</label>
+								</td>
+								<td class="task__date">
+									<?=$val['deadline'];?>
 								</td>
 								<td class="task__date">
 									<?=$val['end_date'];?>
 								</td>
 								<td  class="task__date">
-									<?=$val['category'];?>
+									<?=$val['project'];?>
 								</td>
 							</tr>	
 					<?php endforeach; ?>
