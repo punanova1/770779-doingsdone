@@ -15,7 +15,7 @@
 <div class="page-wrapper">
     <div class="container container--with-sidebar">
         <header class="main-header">
-            <a href="#">
+            <a href="/index.php">
                 <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
             </a>
 
@@ -45,8 +45,8 @@
 				    <ul class="main-navigation__list">
 						<?php foreach ($projects as $i => $project): ?>
 							<li class="main-navigation__list-item <?php if ($i == 0): ?>main-navigation__list-item--active<?php endif ?>">
-								<a class="main-navigation__list-item-link" href="#"><?=$project['project']?></a>
-								<span class="main-navigation__list-item-count"><?php print(calculate_project($tasks, $project['project']))?></span>
+								<a class="main-navigation__list-item-link" href="/index.php?id=<?=$project['id']?>"><?=$project['project']?></a>
+								<span class="main-navigation__list-item-count"><?php print(calculate_project($all_tasks, $project['project']))?></span>
 							</li>
 							<?php endforeach; ?>
                     </ul>
