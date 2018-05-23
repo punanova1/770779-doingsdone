@@ -35,14 +35,11 @@
 										<span class="checkbox__text"><?=htmlspecialchars($val['task']);?></span>
 									</label>
 								</td>
+								<td class="task__file">
+                            		<a <?php if ($val['file_name'] !== NULL): ?> class="download-link" <?php endif;?> href="<?=$val['file_path'];?>"><?=$val['file_name'];?></a>
+								</td>
 								<td class="task__date">
 									<?=$val['deadline'];?>
-								</td>
-								<td class="task__date">
-									<?=$val['end_date'];?>
-								</td>
-								<td  class="task__date">
-									<?=$val['project'];?>
 								</td>
 							</tr>	
 					<?php endforeach; ?>
