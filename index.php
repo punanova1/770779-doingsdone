@@ -33,7 +33,7 @@ else {
 	
 	$show_project = '';
 		if(isset($_GET['id'])) {
-			$show_project ='WHERE tasks.p_id = ' . $_GET['id'];
+			$show_project ='WHERE tasks.p_id = ' . (int)$_GET['id'];
 		}
 		$sql = 'SELECT  task, end_date, file_name, file_path, deadline, tasks.u_id, tasks.p_id, projects.project FROM tasks JOIN projects ON tasks.p_id = projects.id '.$show_project;
 		
