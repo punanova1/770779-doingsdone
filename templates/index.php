@@ -17,30 +17,64 @@
                     </nav>
 
 					<label class="checkbox">
-							<!--добавить сюда аттрибут "checked", если переменная $show_complete_tasks равна единице-->
-							
-							<?php if ($show_complete_tasks == 1): ?>
-								<input class="checkbox__input visually-hidden show_completed" type="checkbox" checked>
-								<span class="checkbox__text"> Показывать выполненные</span>
-							<?php endif; ?>
+							<input
+								class="checkbox__input visually-hidden show_completed"
+								type="checkbox"
+								 <?= $show_complete_tasks == 1 ? "checked" : "" ?>>
+								<span class="checkbox__text">Показывать выполненные</span>
 					</label>
 				</div>
 
                 <table class="tasks">
-					<?php foreach ($tasks as $key => $val): ?>
+					<?php if ($show_complete_tasks == 1): ?>
+						<?php foreach ($tasks as $key => $val): ?>
 							<tr class="tasks__item task <?php if ($val['end_date'] !== NULL): ?>task--completed <?php elseif (deadline($val['deadline']) <= 24 and deadline($val['deadline']) != ""): ?>task--important<?php endif ?>">
 								<td class="task__select">
 									<label class="checkbox task__checkbox">
-										<input class="checkbox__input visually-hidden task__checkbox" type="checkbox" <?php if ($val['end_date'] !== NULL):?> checked <?php endif ?>>
-										<span class="checkbox__text"><?=htmlspecialchars($val['task']);?></span>
+										<input
+											class="checkbox__input visually-hidden task__checkbox"
+											type="checkbox" value="1" 
+											<?= $val['end_date'] == !NULL ? "checked" : "" ?>>
+										<span class="checkbox__text">
+											<?=htmlspecialchars($val['task']);?>
+										</span>
 									</label>
 								</td>
 								<td class="task__file">
-                            		<a <?php if ($val['file_name'] !== NULL): ?> class="download-link" <?php endif;?> href="<?=$val['file_path'];?>"><?=$val['file_name'];?></a>
+									<?php if(!empty($val['file_path'])): ?>
+										<a class="download-link" href="<?=$val['file_path']?>"><?=$val['file_name']?></a>
+									<? endif; ?>
 								</td>
 								<td class="task__date">
 									<?=$val['deadline'];?>
 								</td>
 							</tr>	
-					<?php endforeach; ?>
+						<?php endforeach; ?>
+					<?php else: ?>
+						<?php foreach ($tasks as $key => $val):?>
+						<?php if ($val['end_date'] == NULL): ?>
+							<tr class="tasks__item task <?php if ($val['end_date'] !== NULL): ?>task--completed <?php elseif (deadline($val['deadline']) <= 24 and deadline($val['deadline']) != ""): ?>task--important<?php endif ?>">
+								<td class="task__select">
+									<label class="checkbox task__checkbox">
+										<input
+											class="checkbox__input visually-hidden task__checkbox"
+											type="checkbox" value="1"
+											<?= $val['end_date'] == !NULL ? "checked" : "" ?>>
+										<span class="checkbox__text">
+											<?= htmlspecialchars($val['task']);?>
+										</span>
+									</label>
+								</td>
+								<td class="task__file">
+									<?php if(!empty($val['file_path'])): ?>
+										<a class="download-link" href="<?=$val['file_path']?>"><?=$val['file_name']?></a>
+									<? endif; ?>
+								</td>
+								<td class="task__date">
+									<?=$val['deadline'];?>
+								</td>
+							</tr>
+						<?php endif; ?>
+						<?php endforeach;?>
+					<? endif; ?>
                 </table>

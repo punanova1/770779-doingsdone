@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/flatpickr.min.css">
 </head>
 
-<body><!--class="overlay"-->
+<body <?= $errors["errors"] ? "class=\"overlay\"" : "" ?>>
 <h1 class="visually-hidden">Дела в порядке</h1>
 
 <div class="page-wrapper">
@@ -44,9 +44,9 @@
                 <nav class="main-navigation">
 				    <ul class="main-navigation__list">
 						<?php foreach ($projects as $i => $project): ?>
-							<li class="main-navigation__list-item <?php if ($i == 0): ?>main-navigation__list-item--active<?php endif ?>">
+							<li class="main-navigation__list-item <?= $project['id'] == $p_id ? "main-navigation__list-item--active" : "" ?>">
 								<a class="main-navigation__list-item-link" href="/index.php?id=<?=$project['id']?>"><?=$project['project']?></a>
-								<span class="main-navigation__list-item-count"><?php print(calculate_project($all_tasks, $project['project']))?></span>
+								<span class="main-navigation__list-item-count"><?= calculate_project($link, $project['id'], $u_id) ?></span>
 							</li>
 							<?php endforeach; ?>
                     </ul>
@@ -103,5 +103,6 @@
 
 <script src="flatpickr.js"></script>
 <script src="script.js"></script>
+<?= $addtask ?>
 </body>
 </html>
