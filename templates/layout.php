@@ -15,10 +15,9 @@
 <div class="page-wrapper">
     <div class="container container--with-sidebar">
         <header class="main-header">
-            <a href="/index.php">
+            <a href="#">
                 <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
             </a>
-
             <div class="main-header__side">
                 <a class="main-header__side-item button button--plus open-modal" href="javascript:;"
                 target="task_add">Добавить задачу</a>
@@ -42,13 +41,13 @@
                 <h2 class="content__side-heading">Проекты</h2>
 
                 <nav class="main-navigation">
-				    <ul class="main-navigation__list">
-						<?php foreach ($projects as $i => $project): ?>
-							<li class="main-navigation__list-item <?= $project['id'] == $p_id ? "main-navigation__list-item--active" : "" ?>">
-								<a class="main-navigation__list-item-link" href="/index.php?id=<?=$project['id']?>"><?=$project['project']?></a>
-								<span class="main-navigation__list-item-count"><?= calculate_project($link, $project['id'], $u_id) ?></span>
-							</li>
-							<?php endforeach; ?>
+                    <ul class="main-navigation__list">
+                        <?php foreach ($projects as $i => $project): ?>
+                            <li class="main-navigation__list-item <?= $project['id'] == $p_id ? "main-navigation__list-item--active" : "" ?>">
+                            <a class="main-navigation__list-item-link" href="/index.php?id=<?=$project['id']?>"><?=$project['project']?></a>
+                            <span class="main-navigation__list-item-count"><?= calculate_project($link, $project['id'], $u_id) ?></span>
+                            </li>
+                        <?php endforeach; ?>
                     </ul>
                 </nav>
 

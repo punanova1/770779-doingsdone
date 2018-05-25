@@ -1,2 +1,2 @@
 <?php
-	print 404;
+    print 404;

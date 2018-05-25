@@ -148,4 +148,36 @@ function uploadFile($file) {
     return array($fileUrl, $fileName);
 }
 
+/**
+ * Проверка не занят ли email
+ *
+ * @param mysqli $link Ресурс соединения
+ * @param string $email email пользователя
+ *
+ * @return int $result количество email
+ */
+ function checkEmailTaken($link, $email) {
+    $sql = "SELECT email FROM users WHERE email = ?";
+    $stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($stmt, 's',$email);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    return mysqli_num_rows($result);
+}
+/**
+ * Добавление нового пользователя
+ *
+ * @param mysqli $link Ресурс соединения
+ * @param string $name name пользователя
+ * @param string $email email пользователя
+ * @param string $pw пароль пользователя
+ */
+function addNewUser($link, $name, $email, $pw){
+    $hash_pw = password_hash($pw, PASSWORD_DEFAULT);
+	$sql = "INSERT INTO users (name, email, pw) VALUES (?, ?, ?)";
+    $stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($stmt, "sss", $name, $email, $hash_pw);
+    $res = mysqli_stmt_execute($stmt);
+    return $res;
+}
 ?>
