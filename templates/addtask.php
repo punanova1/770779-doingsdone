@@ -3,7 +3,7 @@
 
   <h2 class="modal__heading">Добавление задачи</h2>
 
-  <form class="form"  action="index.php" method="post" enctype="multipart/form-data">
+  <form class="form" action="index.php" method="post" enctype="multipart/form-data">
     <div class="form__row">
       <label class="form__label" for="name">Название <sup>*</sup></label>
         <p class="form__message"><?= $errors["titleError"] ? "Заполните это поле" : ""?></p>
@@ -15,7 +15,7 @@
 
       <select class="form__input form__input--select" name="project" id="project">
         <?php foreach ($projects as $project): ?>
-            <option value="<?= $project["id"]?>"><?=$project['project']?></option>
+            <option value="<?= $project['id']?>"><?=$project['project']?></option>
         <?php endforeach; ?>
       </select>
     </div>
@@ -40,7 +40,7 @@
     </div>
 
     <div class="form__row form__row--controls">
-      <input class="button" type="submit" name="" value="Добавить">
+      <input class="button" type="submit" name="task_add" value="Добавить">
     </div>
   </form>
 </div>

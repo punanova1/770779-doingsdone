@@ -33,7 +33,7 @@
             <div class="form__row">
               <label class="form__label" for="name">Имя <sup>*</sup></label>
 
-              <input class="form__input <?= $registrationErrors["nameError"] ? "form__input--error" : ""?>" type="text" name="name" id="name" value="" placeholder="Введите имя">
+              <input class="form__input <?= $registrationErrors["nameError"] ? "form__input--error" : ""?>" type="text" name="name" id="name" value="<?=$userName?>" placeholder="Введите имя">
 
               <?= $registrationErrors["nameError"] ? "<p class=\"form__message\">Введите имя пользователя</p>" : "" ?>
             </div>
@@ -41,7 +41,7 @@
             <div class="form__row">
               <label class="form__label" for="email">E-mail <sup>*</sup></label>
 
-              <input class="form__input <?= $registrationErrors["emailError"] ? "form__input--error" : ""?>" type="text" name="email" id="email" value="" placeholder="Введите e-mail">
+              <input class="form__input <?= $registrationErrors["emailError"] ? "form__input--error" : ""?>" type="text" name="email" id="email" value="<?=$userEmail?>" placeholder="Введите e-mail">
 
               <?= $registrationErrors["emailEmptyError"] ? "<p class=\"form__message\">Введите e-mail</p>" : "" ?>
 

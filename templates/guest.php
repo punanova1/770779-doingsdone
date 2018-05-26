@@ -19,7 +19,7 @@
         </a>
 
         <div class="main-header__side">
-          <a class="main-header__side-item button button--transparent open-modal"  href="index.php?page=login"
+          <a class="main-header__side-item button button--transparent open-modal" href="index.php?page=login"
              target="user_login">Войти</a>
         </div>
       </header>

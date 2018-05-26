@@ -11,7 +11,7 @@ require_once "mysql_helper.php";
  *
  * @return int $count количество проектов
  */
- function calculate_project($link, $p_id, $u_id) {
+function calculate_project($link, $p_id, $u_id) {
     if (!$p_id) {
         $sql = "SELECT * FROM tasks WHERE p_id IS NULL AND u_id = ?";
         $stmt = mysqli_prepare($link, $sql);
@@ -26,7 +26,7 @@ require_once "mysql_helper.php";
     $result = mysqli_stmt_get_result($stmt);
     $count = mysqli_num_rows($result);
     return $count;
-};
+}
 /**
  * Добавляет шаблон
  *
@@ -36,16 +36,16 @@ require_once "mysql_helper.php";
  * @return string Подготовленный шаблон
  */
 function include_template($file, $data){
-	if (!file_exists($file)) {
-		return "";
-	}
-	ob_start();
-		extract($data);
-	require_once($file);
-		$contents = ob_get_contents();
-	ob_end_clean();
-	
-	return $contents;
+    if (!file_exists($file)) {
+        return "";
+    }
+    ob_start();
+        extract($data);
+    require_once($file);
+        $contents = ob_get_contents();
+    ob_end_clean();
+
+    return $contents;
 }
 /**
  * Сроки выполнения задачи (до дедлайналайна)
@@ -55,16 +55,15 @@ function include_template($file, $data){
  * @return string $deadline количество часов до дедлайна
  */
 function deadline ($data){
-	$end_date = strtotime($data);
-	if ($end_date == "") {
-		return "";
-	}
-	$curdate = time();
-	$deadline = floor(($end_date - $curdate)/60/60);
-	
-	return $deadline;
-}
+    $end_date = strtotime($data);
+    if ($end_date == "") {
+        return "";
+    }
+    $curdate = time();
+    $deadline = floor(($end_date - $curdate)/60/60);
 
+    return $deadline;
+}
 /**
  * Получает проекты для конкретного пользователя
  *
@@ -76,7 +75,7 @@ function deadline ($data){
 function users_projects($link, $u_id) {
     $sql = "SELECT * FROM projects WHERE u_id = ?";
     $stmt = mysqli_prepare($link, $sql);
-    mysqli_stmt_bind_param($stmt, "i", $u_id);
+    mysqli_stmt_bind_param($stmt, 'i', $u_id);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     if($result) {
@@ -87,7 +86,6 @@ function users_projects($link, $u_id) {
         return [];
     }
 }
-
 /**
  * Получает данные задач для конкретного пользователя и конкретного проекта
  *
@@ -100,11 +98,13 @@ function users_projects($link, $u_id) {
 function users_tasks($link, $p_id, $u_id) {
     if (!$p_id) {
         $sql = "SELECT *, DATE_FORMAT(deadline, '%Y-%m-%d %h:%m') AS deadline FROM tasks WHERE p_id IS NULL AND u_id = ? ORDER BY create_date DESC";
-        $stmt = db_get_prepare_stmt($link, $sql, [$u_id]);
+        $stmt = mysqli_prepare($link, $sql);
+        mysqli_stmt_bind_param($stmt, 'i', $u_id);
     }
     else {
         $sql = "SELECT *, DATE_FORMAT(deadline, '%Y-%m-%d %h:%m') AS deadline FROM tasks WHERE p_id = ? AND u_id = ? ORDER BY create_date DESC";
-        $stmt = db_get_prepare_stmt($link, $sql, [$p_id, $u_id]);
+        $stmt = mysqli_prepare($link, $sql);
+        mysqli_stmt_bind_param($stmt, 'ii', $p_id, $u_id);
     }
     mysqli_stmt_execute($stmt);
     $res = mysqli_stmt_get_result($stmt);
@@ -117,7 +117,6 @@ function users_tasks($link, $p_id, $u_id) {
         return [];
     }
 }
-
 /**
  * Валидация даты (из формы)
  *
@@ -133,7 +132,6 @@ function validity_date($date) {
     }
     return $valid;
 }
-
 /**
  * Загрузка файла
  */
@@ -144,19 +142,18 @@ function uploadFile($file) {
     $fileName = str_replace(' ', '-', $file['preview']['name']);
     $fileName = preg_replace('/[^A-Za-z0-9.\-]/', '', $file['preview']['name']);
     $fileUrl = '/uploads/' . $fileName;
-    move_uploaded_file($file['preview']['tmp_name'], "uploads/" . $fileName );
+    move_uploaded_file($file['preview']['tmp_name'], "uploads/" . $fileName);
     return array($fileUrl, $fileName);
 }
-
 /**
- * Проверка не занят ли email
+ * Проверка email
  *
  * @param mysqli $link Ресурс соединения
  * @param string $email email пользователя
  *
  * @return int $result количество email
  */
- function checkEmailTaken($link, $email) {
+function checkEmail($link, $email) {
     $sql = "SELECT email FROM users WHERE email = ?";
     $stmt = mysqli_prepare($link, $sql);
     mysqli_stmt_bind_param($stmt, 's',$email);
@@ -172,12 +169,55 @@ function uploadFile($file) {
  * @param string $email email пользователя
  * @param string $pw пароль пользователя
  */
-function addNewUser($link, $name, $email, $pw){
+function addNewUser($link, $name, $email, $pw) {
     $hash_pw = password_hash($pw, PASSWORD_DEFAULT);
-	$sql = "INSERT INTO users (name, email, pw) VALUES (?, ?, ?)";
+    $sql = "INSERT INTO users (name, email, pw) VALUES (?, ?, ?)";
     $stmt = mysqli_prepare($link, $sql);
-    mysqli_stmt_bind_param($stmt, "sss", $name, $email, $hash_pw);
+    mysqli_stmt_bind_param($stmt, 'sss', $name, $email, $hash_pw);
     $res = mysqli_stmt_execute($stmt);
     return $res;
 }
-?>
+/**
+ * Проверка подлинности пароля
+ *
+ * @param mysqli $link Ресурс соединения
+ * @param string $email email пользователя
+ * @param string $pw пароль пользователя
+ */
+function verify_password($link, $email, $pw) {
+    $sql = "SELECT pw FROM users WHERE email = ?";
+    $stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($stmt, 's', $email);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $DBpw = mysqli_fetch_assoc($result);
+    return password_verify($pw, $DBpw['pw']);
+}
+/**
+ * Возвращает ID пользователя по эл.почте
+ *
+ * @param mysqli $link Ресурс соединения
+ * @param string $email email пользователя
+ */
+function getUsersIdByEmail($link, $email) {
+    $sql = "SELECT id FROM users WHERE email = ?";
+    $stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($stmt, 's', $email);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    return mysqli_fetch_assoc($result);
+}
+/**
+ * Возвращает имя пользователя по ID
+ *
+ * @param mysqli $link Ресурс соединения
+ * @param string $u_id ID пользователя
+ */
+function getUsersNameById($link, $u_id) {
+    $sql = "SELECT name FROM users WHERE id = ?";
+    $stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($stmt, 's', $u_id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    return mysqli_fetch_assoc($result);
+}

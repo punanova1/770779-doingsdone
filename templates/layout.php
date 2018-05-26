@@ -19,8 +19,8 @@
                 <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
             </a>
             <div class="main-header__side">
-                <a class="main-header__side-item button button--plus open-modal" href="javascript:;"
-                target="task_add">Добавить задачу</a>
+                 <a class="main-header__side-item button button--plus open-modal" href="javascript:;"
+                 target="task_add">Добавить задачу</a>
 
                 <div class="main-header__side-item user-menu">
                     <div class="user-menu__image">
@@ -28,9 +28,9 @@
                     </div>
 
                     <div class="user-menu__data">
-                        <p>Константин</p>
+                        <p><?= $usersName['name'] ?></p>
 
-                        <a href="#">Выйти</a>
+                        <a href="index.php?page=logout">Выйти</a>
                     </div>
                 </div>
             </div>
@@ -99,7 +99,6 @@
         </div>
     </div>
 </footer>
-
 <script src="flatpickr.js"></script>
 <script src="script.js"></script>
 <?= $addtask ?>
