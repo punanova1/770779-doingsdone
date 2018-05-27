@@ -20,14 +20,17 @@ $errors =
         'errors' => false
     ];
 
+if(!isset($_SESSION['user']) AND $_GET['page'] != "registration") {
+    header("Location: guest.php");
+    exit;
+}
 if($_GET['page'] == "registration") {
     header("Location: registration.php");
+    exit;
 }
 if($_GET['page'] == "login") {
     header("Location: login.php");
-}
-if(!isset($_SESSION['user']) AND $_GET['page'] != "registration") {
-    header("Location: guest.php");
+    exit;
 }
 if(isset($_SESSION['user'])) {
     $usersName = getUsersNameById($link, $_SESSION['user']['id']);
@@ -49,7 +52,7 @@ if(isset($_SESSION['user'])) {
         $tasks = users_tasks($link, $p_id, $u_id);
     }
     // создание задачи + валидация
-    if ($_SERVER['REQUEST_METHOD'] == "POST" AND isset($_POST["tasks_add"])) {
+    if ($_SERVER['REQUEST_METHOD'] == "POST" AND isset($_POST["task_add"])) {
         $posted_name = $_POST['name'];
         $posted_date = $_POST['date'];
         $posted_file = $_FILES['preview'];
@@ -81,8 +84,10 @@ if(isset($_SESSION['user'])) {
             if ($res) {
                 if ($posted_project == NULL) {
                     header("Location: ' . 'index.php");
+                    exit;
                 } else {
-                    header("Location: ' . 'index.php?id=" . $posted_project);
+                    header("Location: ' . 'index.php?id=$posted_project");
+                    exit;
                 }
             }
         }

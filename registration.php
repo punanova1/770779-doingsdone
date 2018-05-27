@@ -49,11 +49,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" AND isset($_POST['register'])) {
     if(!$registrationErrors['errors']) {
         if(addNewUser($link, $userName, $userEmail, $userPassword)) {
             header("Location: index.php?page=login");
+            exit;
         }
     }
 }
 $content = include_template('templates/registration.php', [
-    'registrationErrors' => $registrationErrors
+    'registrationErrors' => $registrationErrors,
     'userName' => $userName,
     'userEmail' => $userEmail
 ]);
