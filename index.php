@@ -11,15 +11,21 @@ if (!isset($_SESSION['user'])) {
 }
 
 $u_id = $_SESSION['user']['id'];
-$p_id = 0;
+$p_id = -1;
 $posted_name = "";
+$postedTitle = "";
 $errors =
     [
         'titleError' => false,
         'dateError' => false,
         'errors' => false
     ];
-
+$addProjectErrors =
+    [
+        'emptyTitle' => false,
+        'projectExists' => false,
+        'errors' => false
+    ];
 if(isset($_SESSION['user'])) {
     $usersName = getUsersNameById($link, $_SESSION['user']['id']);
 }
@@ -29,8 +35,6 @@ if(isset($_SESSION['user'])) {
         $content = include_template('templates/error.php', ['error' => $error]);
     }
     else {
-        // показывать или нет выполненные задачи
-        $show_complete_tasks = 0;
         // выбираем список проектов
         $projects = users_projects($link, $u_id);
         array_unshift($projects, ['id' => 0, 'project' => "Входящие"]);
@@ -80,17 +84,59 @@ if(isset($_SESSION['user'])) {
             }
         }
     }
+    // добавление нового проекта
+    if ($_SERVER["REQUEST_METHOD"] == "POST" AND isset($_POST["project_add"])) {
+        $projectName = $_POST["name"];
+        if(empty($projectName)) {
+            $addProjectErrors["emptyTitle"] = true;
+            $addProjectErrors["errors"] = true;
+        }
+        else {
+            if(addNewProject($link, $u_id, $projectName)){
+                header("Location: " . "index.php");
+            }
+            else {
+                $postedTitle = $projectName;
+                $addProjectErrors["projectExists"] = true;
+                $addProjectErrors["errors"] = true;
+            }
+        }
+    }
+    // показывать или нет выполненые задачи
+    if (isset($_GET["show_completed"])) {
+    $show_complete_tasks = intval($_GET["show_completed"]);
+    setCookie("show_complete_tasks", $show_complete_tasks, 01-01-2027, "/");
+    }
+    // завершение/возобновление задачи
+    if(isset($_GET["task_id"])) {
+        $taskId = $_GET["task_id"];
+        task_enddate($link, $taskId);
+    }
+    // фильтры для задач
+    if(isset($_GET["today"])) {
+        $tasks = tasks_filter($link, $u_id, "today");
+    }
+    if(isset($_GET["tomorrow"])) {
+        $tasks = tasks_filter($link, $u_id, "tomorrow");
+    }
+    if(isset($_GET["failed"])) {
+        $tasks = tasks_filter($link, $u_id, "failed");
+    }
 }
 // cодержимое тега main
 $content = include_template('templates/index.php', [
-    'tasks'               => $tasks,
-    'show_complete_tasks' => $show_complete_tasks,
+    'tasks'               => $tasks
 ]);
 // форма добавления задачи
 $addtask = include_template('templates/addtask.php', [
     'projects'    => $projects,
     'errors'      => $errors,
     'posted_name' => $posted_name
+]);
+// форма добавления проекта
+$addproject  = include_template('templates/addproject.php', [
+    'addProjectErrors'    => $addProjectErrors,
+    'postedTitle'         => $postedTitle
 ]);
 $content = include_template('templates/layout.php', [
     'content'  => $content,
@@ -102,6 +148,8 @@ $content = include_template('templates/layout.php', [
     'link'     => $link,
     'addtask'  => $addtask,
     'errors'   => $errors,
+    'addproject'  => $addproject,
+    'addProjectErrors'  => $addProjectErrors,
     'usersName'=> $usersName
 ]);
 print($content);
