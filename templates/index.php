@@ -1,6 +1,4 @@
-<!--Содержимое тега main-->
-
- <h2 class="content__main-heading">Список задач</h2>
+<h2 class="content__main-heading">Список задач</h2>
 
     <form class="search-form" action="index.html" method="post">
         <input class="search-form__input" type="text" name="" value="" placeholder="Поиск по задачам">
@@ -48,10 +46,11 @@
                     <td class="task__date">
                         <?=$val['deadline'];?>
                     </td>
-                </tr><?php endforeach; ?>
-                    <?php else: ?>
-                        <?php foreach ($tasks as $key => $val):?>
-                        <?php if ($val['end_date'] == NULL): ?>
+                </tr>
+            <?php endforeach; ?>
+         <?php else: ?>
+            <?php foreach ($tasks as $key => $val):?>
+                <?php if ($val['end_date'] == NULL): ?>
                 <tr class="tasks__item task <?php if ($val['end_date'] !== NULL): ?>task--completed <?php elseif (deadline($val['deadline']) <= 24 and deadline($val['deadline']) != ""): ?>task--important<?php endif ?>">
                     <td class="task__select">
                         <label class="checkbox task__checkbox">
