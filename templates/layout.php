@@ -30,7 +30,7 @@
                     <div class="user-menu__data">
                         <p><?= $usersName['name'] ?></p>
 
-                        <a href="index.php?page=logout">Выйти</a>
+                        <a href="logout.php">Выйти</a>
                     </div>
                 </div>
             </div>

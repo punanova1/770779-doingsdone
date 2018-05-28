@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" AND isset($_POST['register'])) {
     }
     if(!$registrationErrors['errors']) {
         if(addNewUser($link, $userName, $userEmail, $userPassword)) {
-            header("Location: index.php?page=login");
+            header("Location: login.php");
             exit;
         }
     }

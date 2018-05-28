@@ -5,11 +5,11 @@ require_once "init.php";
 
 session_start();
 
-if($_GET['page'] == "logout") {
-    if(isset($_SESSION['user'])) {
-        $_SESSION = [];
-    }
+if (!isset($_SESSION['user'])) {
+    header("Location: guest.php");
+    exit;
 }
+
 $u_id = $_SESSION['user']['id'];
 $p_id = 0;
 $posted_name = "";
@@ -20,18 +20,6 @@ $errors =
         'errors' => false
     ];
 
-if(!isset($_SESSION['user']) AND $_GET['page'] != "registration") {
-    header("Location: guest.php");
-    exit;
-}
-if($_GET['page'] == "registration") {
-    header("Location: registration.php");
-    exit;
-}
-if($_GET['page'] == "login") {
-    header("Location: login.php");
-    exit;
-}
 if(isset($_SESSION['user'])) {
     $usersName = getUsersNameById($link, $_SESSION['user']['id']);
 }
@@ -83,10 +71,10 @@ if(isset($_SESSION['user'])) {
             $res = mysqli_stmt_execute($stmt);
             if ($res) {
                 if ($posted_project == NULL) {
-                    header("Location: ' . 'index.php");
+                    header("Location: index.php");
                     exit;
                 } else {
-                    header("Location: ' . 'index.php?id=$posted_project");
+                    header("Location: index.php?id=$posted_project");
                     exit;
                 }
             }

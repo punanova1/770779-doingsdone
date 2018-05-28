@@ -38,12 +38,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST" AND isset($_POST['login'])) {
         header("Location: index.php");
     }
 };
-$login = include_template('templates/login.php', [
+$login_page = include_template('templates/login.php', [
         'login' => $login,
         'loginErrors' => $loginErrors,
         'userEmail' => $userEmail
 ]);
 $content = include_template('templates/guest.php', [
-        'login' => $login
+        'login' => $login_page
 ]);
 print($content);

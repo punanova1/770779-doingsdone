@@ -19,7 +19,7 @@
         </a>
 
         <div class="main-header__side">
-          <a class="main-header__side-item button button--transparent open-modal" href="index.php?page=login"
+          <a class="main-header__side-item button button--transparent open-modal" href="login.php"
              target="user_login">Войти</a>
         </div>
       </header>
@@ -33,7 +33,7 @@
             <p>После создания аккаунта, пользователь может начать вносить свои дела, деля их по проектам и указывая сроки.</p>
           </div>
 
-          <a class="welcome__button button" href="index.php?page=registration">Зарегистрироваться</a>
+          <a class="welcome__button button" href="registration.php">Зарегистрироваться</a>
         </section>
       </div>
     </div>
