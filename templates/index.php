@@ -8,30 +8,32 @@
 
     <div class="tasks-controls">
         <nav class="tasks-switch">
-            <a href="/" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
-            <a href="/" class="tasks-switch__item">Повестка дня</a>
-            <a href="/" class="tasks-switch__item">Завтра</a>
-            <a href="/" class="tasks-switch__item">Просроченные</a>
+            <a href="/" class="tasks-switch__item <?= !isset($_GET["today"]) && !isset($_GET["tomorrow"]) && !isset($_GET["failed"]) ? "tasks-switch__item--active" : "" ?>">Все задачи</a>
+            <a href="index.php?today" class="tasks-switch__item <?= isset($_GET["today"]) ? "tasks-switch__item--active" : "" ?>">Повестка дня</a>
+            <a href="index.php?tomorrow" class="tasks-switch__item <?= isset($_GET["tomorrow"]) ? "tasks-switch__item--active" : "" ?>">Завтра</a>
+            <a href="index.php?failed" class="tasks-switch__item <?= isset($_GET["failed"]) ? "tasks-switch__item--active" : "" ?>">Просроченные</a>
         </nav>
-
+    <form>
         <label class="checkbox">
         <input
             class="checkbox__input visually-hidden show_completed"
             type="checkbox"
-            <?= $show_complete_tasks == 1 ? "checked" : "" ?>>
+            name="show_complete"
+            <?= ($_COOKIE["show_complete_tasks"] == 1) ? "checked" : "" ?>>
             <span class="checkbox__text">Показывать выполненные</span>
         </label>
+    </form>
     </div>
 
     <table class="tasks">
-        <?php if ($show_complete_tasks == 1): ?>
+        <?php if ($_COOKIE["show_complete_tasks"] == 1): ?>
             <?php foreach ($tasks as $key => $val): ?>
                 <tr class="tasks__item task <?php if ($val['end_date'] !== NULL): ?>task--completed <?php elseif (deadline($val['deadline']) <= 24 and deadline($val['deadline']) != ""): ?>task--important<?php endif ?>">
                     <td class="task__select">
                         <label class="checkbox task__checkbox">
                             <input
                             class="checkbox__input visually-hidden task__checkbox"
-                            type="checkbox" value="1" 
+                            type="checkbox" value="<?= $val["id"]?>" 
                             <?= $val['end_date'] == !NULL ? "checked" : "" ?>>
                             <span class="checkbox__text">
                                 <?=htmlspecialchars($val['task']);?>

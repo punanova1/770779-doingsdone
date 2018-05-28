@@ -9,13 +9,13 @@
     <link rel="stylesheet" href="css/flatpickr.min.css">
 </head>
 
-<body <?= $errors["errors"] ? "class=\"overlay\"" : "" ?>>
+<body <?= $errors["errors"] || $addProjectErrors["errors"] ? "class=\"overlay\"" : "" ?>>
 <h1 class="visually-hidden">Дела в порядке</h1>
 
 <div class="page-wrapper">
     <div class="container container--with-sidebar">
         <header class="main-header">
-            <a href="#">
+            <a href="index.php">
                 <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
             </a>
             <div class="main-header__side">
@@ -42,6 +42,10 @@
 
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
+                        <li class="main-navigation__list-item <?= $p_id == -1 ? "main-navigation__list-item--active" : "" ?>">
+                            <a class="main-navigation__list-item-link" href="/index.php">Все задачи</a>
+                            <span class="main-navigation__list-item-count"><?= calculate_project($link, -1, $u_id) ?></span>
+                        </li>
                         <?php foreach ($projects as $i => $project): ?>
                             <li class="main-navigation__list-item <?= $project['id'] == $p_id ? "main-navigation__list-item--active" : "" ?>">
                             <a class="main-navigation__list-item-link" href="/index.php?id=<?=$project['id']?>"><?=$project['project']?></a>
@@ -102,5 +106,6 @@
 <script src="flatpickr.js"></script>
 <script src="script.js"></script>
 <?= $addtask ?>
+<?= $addproject ?>
 </body>
 </html>

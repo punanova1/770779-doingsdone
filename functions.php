@@ -17,6 +17,11 @@ function calculate_project($link, $p_id, $u_id) {
         $stmt = mysqli_prepare($link, $sql);
         mysqli_stmt_bind_param($stmt, 'i', $u_id);
     }
+    elseif ($p_id == -1) {
+        $sql = "SELECT * FROM tasks WHERE u_id = ?";
+        $stmt = mysqli_prepare($link, $sql);
+        mysqli_stmt_bind_param($stmt, 'i', $u_id);
+    }
     else {
         $sql = "SELECT * FROM tasks WHERE p_id = ? AND u_id = ?";
         $stmt = mysqli_prepare($link, $sql);
@@ -97,12 +102,17 @@ function users_projects($link, $u_id) {
  */
 function users_tasks($link, $p_id, $u_id) {
     if (!$p_id) {
-        $sql = "SELECT *, DATE_FORMAT(deadline, '%Y-%m-%d %h:%m') AS deadline FROM tasks WHERE p_id IS NULL AND u_id = ? ORDER BY create_date DESC";
+        $sql = "SELECT *, DATE_FORMAT(deadline, '%Y-%m-%d %H:%i') AS deadline FROM tasks WHERE p_id IS NULL AND u_id = ? ORDER BY create_date DESC";
+        $stmt = mysqli_prepare($link, $sql);
+        mysqli_stmt_bind_param($stmt, 'i', $u_id);
+    }
+    elseif ($p_id == -1) {
+        $sql = "SELECT *, DATE_FORMAT(deadline, '%Y-%m-%d %H:%i') AS deadline FROM tasks WHERE u_id = ? ORDER BY create_date DESC";
         $stmt = mysqli_prepare($link, $sql);
         mysqli_stmt_bind_param($stmt, 'i', $u_id);
     }
     else {
-        $sql = "SELECT *, DATE_FORMAT(deadline, '%Y-%m-%d %h:%m') AS deadline FROM tasks WHERE p_id = ? AND u_id = ? ORDER BY create_date DESC";
+        $sql = "SELECT *, DATE_FORMAT(deadline, '%Y-%m-%d %H:%i') AS deadline FROM tasks WHERE p_id = ? AND u_id = ? ORDER BY create_date DESC";
         $stmt = mysqli_prepare($link, $sql);
         mysqli_stmt_bind_param($stmt, 'ii', $p_id, $u_id);
     }
@@ -211,7 +221,7 @@ function getUsersIdByEmail($link, $email) {
  * Возвращает имя пользователя по ID
  *
  * @param mysqli $link Ресурс соединения
- * @param string $u_id ID пользователя
+ * @param int $u_id ID пользователя
  */
 function getUsersNameById($link, $u_id) {
     $sql = "SELECT name FROM users WHERE id = ?";
@@ -220,4 +230,82 @@ function getUsersNameById($link, $u_id) {
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     return mysqli_fetch_assoc($result);
+}
+/**
+ * Добавление нового проекта
+ *
+ * @param mysqli $link Ресурс соединения
+ * @param int $u_id ID пользователя
+ * @param string $u_id название проекта
+ */
+function addNewProject($link, $u_id, $projectName)
+{
+    $sql = "SELECT project FROM projects WHERE u_id = ? AND project = ?";
+    $stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($stmt, 'is', $u_id, $projectName);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    if (mysqli_num_rows($result) == 0) {
+        $sql = "INSERT INTO projects (project, u_id) VALUES (?, ?)";
+        $stmt = mysqli_prepare($link, $sql);
+        mysqli_stmt_bind_param($stmt, "si", $projectName, $u_id);
+        return mysqli_stmt_execute($stmt);
+    }
+    return false;
+}
+/**
+ * Завершение/возобновление задачи
+ *
+ * @param mysqli $link Ресурс соединения
+ * @param int $taskId ID задачи
+ */
+function task_enddate($link, $taskId)
+{
+    $sql = "SELECT * FROM tasks WHERE id = ?";
+    $stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $taskId);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $task = mysqli_fetch_assoc($result);
+        if ($task['end_date'] == NULL) {
+            $sql = "UPDATE tasks SET end_date = NOW() WHERE id = ?";
+            $stmt = mysqli_prepare($link, $sql);
+            mysqli_stmt_bind_param($stmt, 'i', $taskId);
+            mysqli_stmt_execute($stmt);
+            return mysqli_stmt_execute($stmt);
+        } else {
+            $sql = "UPDATE tasks SET end_date = NULL WHERE id = ?";
+            $stmt = mysqli_prepare($link, $sql);
+            mysqli_stmt_bind_param($stmt, 'i', $taskId);
+            mysqli_stmt_execute($stmt);
+            return mysqli_stmt_execute($stmt);
+        }
+    return false;
+}
+/**
+ * Выборка задач
+ *
+ * @param mysqli $link Ресурс соединения
+ * @param int $u_id ID пользователя
+ * @param $date параметр выборки
+ */
+ function tasks_filter($link, $u_id, $date)
+{
+    switch ($date) {
+        case "today":
+            $sql = "SELECT *, DATE_FORMAT(deadline, '%Y-%m-%d %H:%i') AS deadline FROM tasks WHERE u_id = ? AND STR_TO_DATE(CURDATE(), \"%Y-%m-%d\") = STR_TO_DATE(deadline, \"%Y-%m-%d\")";
+            break;
+        case "tomorrow":
+            $sql = "SELECT *, DATE_FORMAT(deadline, '%Y-%m-%d %H:%i') AS deadline FROM tasks WHERE u_id = ? AND STR_TO_DATE(CURDATE() + INTERVAL 1 DAY, \"%Y-%m-%d\") = STR_TO_DATE(deadline, \"%Y-%m-%d\")";
+            break;
+        case "failed":
+            $sql = "SELECT *, DATE_FORMAT(deadline, '%Y-%m-%d %H:%i') AS deadline FROM tasks WHERE u_id = ? AND STR_TO_DATE(CURDATE(), \"%Y-%m-%d\") > STR_TO_DATE(deadline, \"%Y-%m-%d\") AND end_date is NULL";
+            break;
+    }
+    $stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $u_id);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+   return $result;
 }
