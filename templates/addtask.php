@@ -7,7 +7,7 @@
     <div class="form__row">
       <label class="form__label" for="name">Название <sup>*</sup></label>
         <p class="form__message"><?= $errors["titleError"] ? "Заполните это поле" : ""?></p>
-      <input class="form__input <?= $errors["titleError"] ? "form__input--error" : ""?>" type="text" name="name" id="name" value="<?= $posted_name?>" placeholder="Введите название">
+      <input class="form__input <?= $errors["titleError"] ? "form__input--error" : ""?>" type="text" name="name" id="name" value="<?= strip_tags($posted_name) ?>" placeholder="Введите название">
     </div>
 
     <div class="form__row">

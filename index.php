@@ -45,7 +45,7 @@ if(isset($_SESSION['user'])) {
     }
     // создание задачи + валидация
     if ($_SERVER['REQUEST_METHOD'] == "POST" AND isset($_POST["task_add"])) {
-        $posted_name = $_POST['name'];
+        $posted_name = (string)$_POST['name'];
         $posted_date = $_POST['date'];
         $posted_file = $_FILES['preview'];
         $posted_project = $_POST['project'];
@@ -86,7 +86,7 @@ if(isset($_SESSION['user'])) {
     }
     // добавление нового проекта
     if ($_SERVER["REQUEST_METHOD"] == "POST" AND isset($_POST["project_add"])) {
-        $projectName = $_POST["name"];
+        $projectName = (string)$_POST["name"];
         if(empty($projectName)) {
             $addProjectErrors["emptyTitle"] = true;
             $addProjectErrors["errors"] = true;
@@ -103,9 +103,9 @@ if(isset($_SESSION['user'])) {
         }
     }
     // показывать или нет выполненые задачи
-    if (isset($_GET["show_completed"])) {
-    $show_complete_tasks = intval($_GET["show_completed"]);
-    setCookie("show_complete_tasks", $show_complete_tasks, 01-01-2027, "/");
+    $show_complete_tasks = false;
+    if (array_key_exists("show_completed", $_GET)) {
+        $show_complete_tasks = $_GET["show_completed"] === "1";
     }
     // завершение/возобновление задачи
     if(isset($_GET["task_id"])) {
@@ -125,7 +125,8 @@ if(isset($_SESSION['user'])) {
 }
 // cодержимое тега main
 $content = include_template('templates/index.php', [
-    'tasks'               => $tasks
+    'tasks'               => $tasks,
+    'show_complete_tasks'=> $show_complete_tasks
 ]);
 // форма добавления задачи
 $addtask = include_template('templates/addtask.php', [

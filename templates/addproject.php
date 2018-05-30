@@ -7,7 +7,7 @@
     <div class="form__row">
       <label class="form__label" for="project_name">Название <sup>*</sup></label>
 
-      <input class="form__input" type="text" name="name" id="project_name" value="<?= $postedTitle ?>" placeholder="Введите название проекта">
+      <input class="form__input" type="text" name="name" id="project_name" value="<?= strip_tags($postedTitle) ?>" placeholder="Введите название проекта">
       <p class="form__message"><?= $addProjectErrors["projectExists"] ? "Такой проект уже существует" : ""?></p>
       <p class="form__message"><?= $addProjectErrors["emptyTitle"] ? "Заполните это поле" : ""?></p>
     </div>

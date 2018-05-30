@@ -15,7 +15,7 @@ $userEmail = "";
 if($_SERVER['REQUEST_METHOD'] == "POST" AND isset($_POST['login'])) {
     $userEmail = $_POST['email'];
     $userPassword = $_POST['password'];
-    if (empty($userEmail)) {
+    if (!(filter_var($userEmail, FILTER_VALIDATE_EMAIL)) OR (empty($userEmail))) {
         $loginErrors['emptyEmail'] = true;
         $loginErrors['errors'] = true;
     }

@@ -6,7 +6,7 @@
   <form class="form" action="" method="post">
     <div class="form__row">
         <label class="form__label" for="email">E-mail <sup>*</sup></label>
-        <input class="form__input <?= $loginErrors["emptyEmail"] || $loginErrors["emailNotFound"] ? "form__input--error" : "" ?>" type="text" name="email" id="email" value="<?=$userEmail?>" placeholder="Введите e-mail">
+        <input class="form__input <?= $loginErrors["emptyEmail"] || $loginErrors["emailNotFound"] ? "form__input--error" : "" ?>" type="text" name="email" id="email" value="<?=strip_tags($userEmail)?>" placeholder="Введите e-mail">
         <?= $loginErrors["emptyEmail"] ? "<p class=\"form__message\">Введите e-mail</p>" : "" ?>
         <?= $loginErrors["emailNotFound"] ? "<p class=\"form__message\">Пользователь с таким email не найден</p>" : "" ?>
     </div>
