@@ -28,7 +28,7 @@
                     </div>
 
                     <div class="user-menu__data">
-                        <p><?= $usersName['name'] ?></p>
+                        <p><?= strip_tags($usersName['name']) ?></p>
 
                         <a href="logout.php">Выйти</a>
                     </div>
@@ -48,7 +48,7 @@
                         </li>
                         <?php foreach ($projects as $i => $project): ?>
                             <li class="main-navigation__list-item <?= $project['id'] == $p_id ? "main-navigation__list-item--active" : "" ?>">
-                            <a class="main-navigation__list-item-link" href="/index.php?id=<?=$project['id']?>"><?=$project['project']?></a>
+                            <a class="main-navigation__list-item-link" href="/index.php?id=<?=$project['id']?>"><?=strip_tags($project['project'])?></a>
                             <span class="main-navigation__list-item-count"><?= calculate_project($link, $project['id'], $u_id) ?></span>
                             </li>
                         <?php endforeach; ?>

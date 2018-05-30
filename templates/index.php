@@ -18,15 +18,16 @@
         <input
             class="checkbox__input visually-hidden show_completed"
             type="checkbox"
+            onchange="location.href = 'index.php?show_completed=' + (this.checked ? '1' : '0')"
             name="show_complete"
-            <?= ($_COOKIE["show_complete_tasks"] == 1) ? "checked" : "" ?>>
-            <span class="checkbox__text">Показывать выполненные</span>
+            <?= $show_complete_tasks == 1 ? "checked" : "" ?>>
+            <span class= "checkbox__text" > Показывать выполненные </span>
         </label>
     </form>
     </div>
 
     <table class="tasks">
-        <?php if ($_COOKIE["show_complete_tasks"] == 1): ?>
+        <?php if ($show_complete_tasks == 1): ?>
             <?php foreach ($tasks as $key => $val): ?>
                 <tr class="tasks__item task <?php if ($val['end_date'] !== NULL): ?>task--completed <?php elseif (deadline($val['deadline']) <= 24 and deadline($val['deadline']) != ""): ?>task--important<?php endif ?>">
                     <td class="task__select">
@@ -42,7 +43,7 @@
                     </td>
                     <td class="task__file">
                         <?php if(!empty($val['file_path'])): ?>
-                            <a class="download-link" href="<?=$val['file_path']?>"><?=$val['file_name']?></a>
+                            <a class="download-link" href="<?=$val['file_path']?>"><?=htmlspecialchars($val['file_name'])?></a>
                         <?php endif ?>
                     </td>
                     <td class="task__date">
@@ -67,7 +68,7 @@
                     </td>
                     <td class="task__file">
                         <?php if(!empty($val['file_path'])): ?>
-                            <a class="download-link" href="<?=$val['file_path']?>"><?=$val['file_name']?></a>
+                            <a class="download-link" href="<?=$val['file_path']?>"><?=htmlspecialchars($val['file_name'])?></a>
                         <?php endif ?>
                     </td>
                     <td class="task__date">
