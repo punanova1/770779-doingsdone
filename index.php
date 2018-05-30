@@ -11,7 +11,7 @@ if (!isset($_SESSION['user'])) {
 }
 
 $u_id = $_SESSION['user']['id'];
-$p_id = -1;
+$p_id = 0;
 $posted_name = "";
 $postedTitle = "";
 $errors =

@@ -106,11 +106,6 @@ function users_tasks($link, $p_id, $u_id) {
         $stmt = mysqli_prepare($link, $sql);
         mysqli_stmt_bind_param($stmt, 'i', $u_id);
     }
-    elseif ($p_id == -1) {
-        $sql = "SELECT *, DATE_FORMAT(deadline, '%Y-%m-%d %H:%i') AS deadline FROM tasks WHERE u_id = ? ORDER BY create_date DESC";
-        $stmt = mysqli_prepare($link, $sql);
-        mysqli_stmt_bind_param($stmt, 'i', $u_id);
-    }
     else {
         $sql = "SELECT *, DATE_FORMAT(deadline, '%Y-%m-%d %H:%i') AS deadline FROM tasks WHERE p_id = ? AND u_id = ? ORDER BY create_date DESC";
         $stmt = mysqli_prepare($link, $sql);
@@ -256,31 +251,31 @@ function addNewProject($link, $u_id, $projectName)
 /**
  * Завершение/возобновление задачи
  *
- * @param mysqli $link Ресурс соединения
- * @param int $taskId ID задачи
+ * @param mysqli $link   Ресурс соединения
+ * @param int    $taskId ID задачи
  */
 function task_enddate($link, $taskId)
 {
-    $sql = "SELECT * FROM tasks WHERE id = ?";
+    $sql  = "SELECT * FROM tasks WHERE id = ?";
     $stmt = mysqli_prepare($link, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $taskId);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
-    $task = mysqli_fetch_assoc($result);
-        if ($task['end_date'] == NULL) {
-            $sql = "UPDATE tasks SET end_date = NOW() WHERE id = ?";
-            $stmt = mysqli_prepare($link, $sql);
-            mysqli_stmt_bind_param($stmt, 'i', $taskId);
-            mysqli_stmt_execute($stmt);
-            return mysqli_stmt_execute($stmt);
-        } else {
-            $sql = "UPDATE tasks SET end_date = NULL WHERE id = ?";
-            $stmt = mysqli_prepare($link, $sql);
-            mysqli_stmt_bind_param($stmt, 'i', $taskId);
-            mysqli_stmt_execute($stmt);
-            return mysqli_stmt_execute($stmt);
-        }
-    return false;
+    $task   = mysqli_fetch_assoc($result);
+
+    if ($task['end_date'] == null) {
+        $sql  = "UPDATE tasks SET end_date = NOW() WHERE id = ?";
+    } else {
+        $sql  = "UPDATE tasks SET end_date = NULL WHERE id = ?";
+    }
+
+    $stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $taskId);
+
+    $stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $taskId);
+
+    return mysqli_stmt_execute($stmt);
 }
 /**
  * Выборка задач

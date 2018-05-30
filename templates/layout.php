@@ -42,13 +42,9 @@
 
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
-                        <li class="main-navigation__list-item <?= $p_id == -1 ? "main-navigation__list-item--active" : "" ?>">
-                            <a class="main-navigation__list-item-link" href="/index.php">Все задачи</a>
-                            <span class="main-navigation__list-item-count"><?= calculate_project($link, -1, $u_id) ?></span>
-                        </li>
                         <?php foreach ($projects as $i => $project): ?>
                             <li class="main-navigation__list-item <?= $project['id'] == $p_id ? "main-navigation__list-item--active" : "" ?>">
-                            <a class="main-navigation__list-item-link" href="/index.php?id=<?=$project['id']?>"><?=strip_tags($project['project'])?></a>
+                            <a class="main-navigation__list-item-link" href="/index.php?id=<?=$project['id']?>"><?=$project['project']?></a>
                             <span class="main-navigation__list-item-count"><?= calculate_project($link, $project['id'], $u_id) ?></span>
                             </li>
                         <?php endforeach; ?>

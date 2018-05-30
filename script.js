@@ -37,14 +37,6 @@ document.body.addEventListener('click', function (event) {
   }
 });
 
-var $checkbox = document.getElementsByClassName('show_completed')[0];
-
-$checkbox.addEventListener('change', function (event) {
-  var is_checked = +event.target.checked;
-
-  window.location = '/index.php?show_completed=' + is_checked;
-});
-
 var $taskCheckboxes = document.getElementsByClassName('tasks')[0];
 
 $taskCheckboxes.addEventListener('change', function (event) {
