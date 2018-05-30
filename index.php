@@ -45,10 +45,18 @@ if(isset($_SESSION['user'])) {
     }
     // создание задачи + валидация
     if ($_SERVER['REQUEST_METHOD'] == "POST" AND isset($_POST["task_add"])) {
-        $posted_name = (string)$_POST['name'];
-        $posted_date = $_POST['date'];
-        $posted_file = $_FILES['preview'];
-        $posted_project = $_POST['project'];
+        if(isset($_POST['name'])) {
+            $posted_name = (string)$_POST['name'];
+        }
+        if(isset($_POST['date'])) {
+            $posted_date = $_POST['date'];
+        }
+        if(isset($_FILES['preview'])) {
+            $posted_file = $_FILES['preview'];
+        }
+        if(isset($_POST['project'])) {
+            $posted_project = $_POST['project'];
+        }
         if (empty($posted_name)) {
             $errors['titleError'] = true;
             $errors['errors'] = true;
@@ -86,7 +94,9 @@ if(isset($_SESSION['user'])) {
     }
     // добавление нового проекта
     if ($_SERVER["REQUEST_METHOD"] == "POST" AND isset($_POST["project_add"])) {
-        $projectName = (string)$_POST["name"];
+        if(isset($_POST['name'])) {
+			$projectName = (string)$_POST["name"];
+		}
         if(empty($projectName)) {
             $addProjectErrors["emptyTitle"] = true;
             $addProjectErrors["errors"] = true;

@@ -16,9 +16,15 @@ $userName = "";
 $userEmail = "";
 // регистрация пользователя
 if ($_SERVER['REQUEST_METHOD'] == "POST" AND isset($_POST['register'])) {
-    $userName = (string)$_POST['name'];
-    $userEmail = (string)$_POST['email'];
-    $userPassword = (string)$_POST['password'];
+    if(isset($_POST['name'])) {
+        $userName = (string)$_POST['name'];
+    }
+    if(isset($_POST['email'])) {
+        $userEmail = (string)$_POST['email'];
+    }
+    if(isset($_POST['password'])) {
+        $userPassword = (string)$_POST['password'];
+    }
 
     if(empty($userName)) {
         $registrationErrors['nameError'] = true;

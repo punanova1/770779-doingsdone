@@ -13,8 +13,12 @@ $loginErrors =
     ];
 $userEmail = "";
 if($_SERVER['REQUEST_METHOD'] == "POST" AND isset($_POST['login'])) {
-    $userEmail = (string)$_POST['email'];
-    $userPassword = (string)$_POST['password'];
+    if(isset($_POST['email'])) {
+        $userEmail = (string)$_POST['email'];
+    }
+    if(isset($_POST['password'])) {
+        $userPassword = (string)$_POST['password'];
+    }
     if (!(filter_var($userEmail, FILTER_VALIDATE_EMAIL)) OR (empty($userEmail))) {
         $loginErrors['emptyEmail'] = true;
         $loginErrors['errors'] = true;
